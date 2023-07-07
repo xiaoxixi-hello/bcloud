@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18
       - name: list dir
-        run: pwd && ls -l
+        run: dir
 #      - name: Get Wails
 #        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 #      - name: Build Bcloud for Windows-amd64
