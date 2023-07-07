@@ -1,4 +1,4 @@
-name: "GTools"
+name: "Bcloud"
 on:
   workflow_dispatch:
     # 手动触发
@@ -27,14 +27,14 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Build GTools for Windows-amd64
+      - name: Build for Windows-amd64
         if: matrix.platform == 'windows-2019'
         run: |
           wails build -clean -tags exp_gowebview2loader
-      - name: Build GTools for MacOS-amd64
+      - name: Build for MacOS-amd64
         if: matrix.platform == 'macos-11'
         run: |
           wails build -clean
@@ -42,17 +42,17 @@ jobs:
         if: matrix.platform == 'macos-11'
         uses: actions/upload-artifact@v3
         with:
-          name: GTools-macos-amd64
+          name: Bcloud-macos-amd64
           path: build/bin/*
       - name: upload artifacts windows
         if: matrix.platform == 'windows-2019'
         uses: actions/upload-artifact@v3
         with:
-          name: GTools-windows-amd64
+          name: Bcloud-windows-amd64
           path: build/bin/*
       - name: upload artifacts ubuntu
         if: matrix.platform == 'ubuntu-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: GTools-linux-amd64
+          name: Bcloud-linux-amd64
           path: build/bin/*
