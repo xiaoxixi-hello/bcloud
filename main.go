@@ -22,7 +22,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:             "挖掘机",
+		Title:             "星点挖掘机",
 		Width:             1100,  // 启动宽度
 		Height:            768,   // 启动高度
 		MinWidth:          1100,  // 最小宽度

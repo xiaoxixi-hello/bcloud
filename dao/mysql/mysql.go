@@ -47,7 +47,12 @@ func InitLocalDB(path string) *gorm.DB {
 	//		SingularTable: true,  // 单数表名
 	//	},
 	//})
-	db, err := gorm.Open(sqlite.Open(path))
+	db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix:   "tb_", //表名前缀
+			SingularTable: true,  // 单数表名
+		},
+	})
 	if err != nil {
 		panic("初始化本地数据库失败")
 	}

@@ -1,0 +1,32 @@
+name: "星点挖掘机"
+on:
+  workflow_dispatch:
+
+jobs:
+  package:
+    strategy:
+      matrix: # [windows-2019]
+        platform: [windows-2019]
+        go-version: [1.20.3]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Get Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - name: Build GTools for Windows-amd64
+        if: matrix.platform == 'windows-2019'
+        run: |
+          wails build -clean -tags exp_gowebview2loader
+      - name: upload artifacts windows
+        if: matrix.platform == 'windows-2019'
+        uses: actions/upload-artifact@v3
+        with:
+          name: GTools-windows-amd64
+          path: build/bin/*

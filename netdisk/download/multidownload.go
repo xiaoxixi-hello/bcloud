@@ -30,9 +30,10 @@ func (m *MultiThread) ProducerDown(f []*DownDetail) {
 func (m *MultiThread) ConsumerDown(ch <-chan *DownDetail, i int) {
 	for c := range ch {
 		if err := download(c.Dlink, c.Path, m.base, m.id, m.accessToken, m.db); err != nil {
-			if err.Error() == "该任务需要删除" {
+			if err.Error() == "该任务需要删除" || err.Error() == "http返回码异常" {
 				continue
 			}
+
 			m.jobs <- c
 			zap.L().Info("任务重新入队列成功,", zap.String("进程任务ID", m.id), zap.String("name", c.Name), zap.Error(err))
 			zap.L().Info(fmt.Sprintf("剩余任务个数:%d", m.count+1), zap.String("任务进程ID", m.id), zap.Int("当前下载协程ID", i+1))
