@@ -1,0 +1,14 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "星点挖掘机",
+  "icon": "build/appicon.png",
+  "outputfilename": "bcloud",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "黑默丁格",
+    "email": "黑默丁格@gmail.com"
+  }
+}
