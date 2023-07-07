@@ -18,15 +18,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Get Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Build GTools for Windows-amd64
-        if: matrix.platform == 'windows-2019'
-        run: |
-          wails build -clean
-      - name: upload artifacts windows
-        if: matrix.platform == 'windows-2019'
-        uses: actions/upload-artifact@v3
-        with:
-          name: GTools-windows-amd64
-          path: build/bin/*
+      - name: list dir
+        run: pwd && ls -l
+#      - name: Get Wails
+#        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+#      - name: Build Bcloud for Windows-amd64
+#        if: matrix.platform == 'windows-2019'
+#        run: |
+#          wails build -clean
+#      - name: upload artifacts windows
+#        if: matrix.platform == 'windows-2019'
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Bcloud-windows-amd64
+#          path: build/bin/*
