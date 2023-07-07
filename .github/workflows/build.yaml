@@ -5,8 +5,8 @@ on:
 jobs:
   package:
     strategy:
-      matrix: # [windows-2019]
-        platform: [windows-2019]
+      matrix: # [windows-2019, macos-11]
+        platform: [macos-11]
         go-version: [1.20.3]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -18,17 +18,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: list dir
-        run: dir
-#      - name: Get Wails
-#        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-#      - name: Build Bcloud for Windows-amd64
-#        if: matrix.platform == 'windows-2019'
-#        run: |
-#          wails build -clean
-#      - name: upload artifacts windows
-#        if: matrix.platform == 'windows-2019'
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: Bcloud-windows-amd64
-#          path: build/bin/*
+      - name: Get Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - name: Build Bcloud for Windows-amd64
+        if: matrix.platform == 'windows-2019'
+        run: |
+          wails build -clean -tags exp_gowebview2loader
+      - name: upload artifacts windows
+        if: matrix.platform == 'windows-2019'
+        with:
+          name: Bcloud-windows-amd64
+          path: build/bin/*
