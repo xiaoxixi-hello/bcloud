@@ -21,7 +21,7 @@
           style="width: 100%"
           @row-click="handleRowClick"
           @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="10px" />
+        <el-table-column type="selection" width="30px" />
         <el-table-column label="文件名">
           <template #default="scope">
             <div v-if="scope.row.FileType === '文件夹'">
