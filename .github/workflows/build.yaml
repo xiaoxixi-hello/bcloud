@@ -7,7 +7,7 @@ jobs:
   package:
     strategy:
       matrix: # [windows-2019, macos-11, ubuntu-latest]
-        platform: [windows-latest,macos-13]
+        platform: [windows-latest]
         go-version: [1.20.3]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -33,7 +33,7 @@ jobs:
       - name: Build for Windows-amd64
         if: matrix.platform == 'windows-latest'
         run: |
-          wails build -clean -tags exp_gowebview2loader
+          wails build -clean -webview2 embed
       - name: Build for MacOS-amd64
         if: matrix.platform == 'macos-13'
         run: |
