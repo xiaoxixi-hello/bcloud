@@ -42,7 +42,7 @@ func (a *App) Startup(ctx context.Context) {
 
 // OnBeforeClose action
 func (a *App) OnBeforeClose(ctx context.Context) bool {
-	
+
 	return true
 }
 

@@ -39,7 +39,7 @@ jobs:
         run: |
           wails build -clean
       - name: upload artifacts macOS
-        if: matrix.platform == 'macos-11'
+        if: matrix.platform == 'macos-13'
         uses: actions/upload-artifact@v3
         with:
           name: Bcloud-macos-amd64
