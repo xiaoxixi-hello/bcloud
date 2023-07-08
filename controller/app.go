@@ -7,6 +7,7 @@ import (
 	"bcloud/netdisk/floder"
 	"context"
 	"fmt"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -42,7 +43,6 @@ func (a *App) Startup(ctx context.Context) {
 
 // OnBeforeClose action
 func (a *App) OnBeforeClose(ctx context.Context) bool {
-
 	return true
 }
 
@@ -52,4 +52,8 @@ func (a *App) OnDOMReady(ctx context.Context) {
 	//runtime.EventsOn(a.ctx, "test", func(optionalData ...interface{}) {
 	//	a.Log.Info(optionalData...)
 	//})
+}
+
+func (a *App) Shutdown(ctx context.Context) {
+	zap.L().Info("Shutting down. Goodbye!")
 }

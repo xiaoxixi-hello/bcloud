@@ -50,6 +50,10 @@ export function GetTopList(arg1) {
   return window['go']['controller']['App']['GetTopList'](arg1);
 }
 
+export function OnBeforeClose(arg1) {
+  return window['go']['controller']['App']['OnBeforeClose'](arg1);
+}
+
 export function UpdateConfigItem(arg1) {
   return window['go']['controller']['App']['UpdateConfigItem'](arg1);
 }
