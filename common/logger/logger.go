@@ -13,7 +13,7 @@ var lg *zap.Logger
 
 // InitLogger 初始化Logger
 func InitLogger(level, mode string) {
-	writeSyncer := getLogWriter(fmt.Sprintf("%s/.bcloud.log", floder.GetConfigDir()), 200, 30, 7)
+	writeSyncer := getLogWriter(fmt.Sprintf("%s/bcloud.log", floder.GetConfigDir()), 200, 30, 7)
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
 	err := l.UnmarshalText([]byte(level))

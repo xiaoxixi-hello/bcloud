@@ -37,6 +37,18 @@ func GetConfigDir() string {
 	return gtDir
 }
 
+func GetDownloadsDir() string {
+	userInfo, err := user.Current()
+	if err != nil {
+		panic("Bcloud配置文件夹路径获取失败" + err.Error())
+	}
+	var homeDir = userInfo.HomeDir
+	// 判断 homeDir/Bcloud 文件夹是否存在
+	var gtDir = homeDir + "/Downloads"
+
+	return gtDir
+}
+
 // CreateDir 创建远程文件夹
 func CreateDir(p string, token string) {
 	protocal := "https"

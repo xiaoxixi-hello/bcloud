@@ -29,7 +29,7 @@ func (a *App) Startup(ctx context.Context) {
 		4. 获取key、获取授权
 	*/
 	logger.InitLogger("debug", "dev")
-	a.DB = mysql.InitLocalDB(fmt.Sprintf("%s/.bcloud.db", floder.GetConfigDir()))
+	a.DB = mysql.InitLocalDB(fmt.Sprintf("%s/bcloud.db", floder.GetConfigDir()))
 	_ = a.DB.AutoMigrate(&ConfigItem{}, &download.DownDetail{})
 	a.CB = mysql.InitDB()
 
@@ -42,10 +42,8 @@ func (a *App) Startup(ctx context.Context) {
 
 // OnBeforeClose action
 func (a *App) OnBeforeClose(ctx context.Context) bool {
-	// 关闭数据库连接
-
-	// 返回 true 将阻止程序关闭
-	return false
+	
+	return true
 }
 
 // OnDOMReady action

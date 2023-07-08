@@ -69,11 +69,11 @@ func (a *App) initConfigData(name, token string) string {
 		zap.L().Info(fmt.Sprintf("初始化网盘成功,PanID %s", panID))
 		return "/" + panID
 	case "DownPath":
-		if a.DB.Create(&ConfigItem{Name: "DownPath", Value: floder.GetConfigDir()}).Error != nil {
+		if a.DB.Create(&ConfigItem{Name: "DownPath", Value: floder.GetDownloadsDir()}).Error != nil {
 			panic("初始化网盘下载路径失败")
 		}
-		zap.L().Info(fmt.Sprintf("初始化网盘下载路径成功,DownPath %s", floder.GetConfigDir()))
-		return floder.GetConfigDir()
+		zap.L().Info(fmt.Sprintf("初始化网盘下载路径成功,DownPath %s", floder.GetDownloadsDir()))
+		return floder.GetDownloadsDir()
 	case "MaxDownProcess":
 		if a.DB.Create(&ConfigItem{Name: "MaxDownProcess", Value: "4"}).Error != nil {
 			panic("初始化网盘并发下载线程数失败")
