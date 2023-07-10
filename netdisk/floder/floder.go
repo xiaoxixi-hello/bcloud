@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"go.uber.org/zap"
-	"golang.org/x/exp/slog"
 	"log"
 	"net/url"
 	"os"
@@ -91,14 +90,16 @@ func CreateDir(p string, token string) {
 func DownDirPath(f string, base string) (string, string, error) {
 	var localPath string
 	localPath = base + f
-	if !filepath.IsAbs(f) {
-		dir, err := os.Getwd()
-		if err != nil {
-			slog.Error("err", err)
-			return "", "", err
-		}
-		localPath = filepath.Join(dir, "/", localPath)
-	}
+	//fmt.Println(filepath.IsAbs(f))
+	//fmt.Println(f)
+	//if !filepath.IsAbs(f) {
+	//	dir, err := os.Getwd()
+	//	if err != nil {
+	//		slog.Error("err", err)
+	//		return "", "", err
+	//	}
+	//	localPath = filepath.Join(dir, "/", localPath)
+	//}
 	// 创建文件夹
 	var path, fileName string
 	s, _ := os.Stat(path)
@@ -109,6 +110,7 @@ func DownDirPath(f string, base string) (string, string, error) {
 		fileName = pathList[len(pathList)-1]
 		path = localPath[:len(localPath)-len(fileName)]
 	}
+	zap.L().Info("path", zap.String("path", path))
 	err := os.MkdirAll(path, os.ModePerm)
 	return path, fileName, err
 }
