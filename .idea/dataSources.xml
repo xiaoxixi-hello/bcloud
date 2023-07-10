@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://127.0.0.1:63306/db_bcloud</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="db_bcloud@114.115.175.220" uuid="21e7730e-4eda-4608-ac94-5dccabc2bdd3">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://114.115.175.220:45672/db_bcloud</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

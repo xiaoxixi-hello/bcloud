@@ -33,7 +33,7 @@ jobs:
       - name: Build for Windows-amd64
         if: matrix.platform == 'windows-latest'
         run: |
-          wails build -clean -webview2 embed
+          wails build -clean
       - name: Build for MacOS-amd64
         if: matrix.platform == 'macos-13'
         run: |

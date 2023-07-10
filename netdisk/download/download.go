@@ -186,8 +186,12 @@ func download(dlink, filename, base, id, token string, db *gorm.DB) error {
 
 func upDataProcess(link, status string, db *gorm.DB) int {
 	var f DownDetail
-	if db.Find(&f, "dlink = ?", link).Error != nil {
+	err := db.Find(&f, "dlink = ?", link).Error
+	if err != nil {
 		panic("更新下载进度失败")
+	}
+	if err == gorm.ErrRecordNotFound {
+		return 1
 	}
 	if f.ProcessStatus == 1 {
 		db.Delete(&f, "dlink = ?", link)
