@@ -5,6 +5,8 @@ import (
 	"bcloud/netdisk"
 	"encoding/json"
 	"fmt"
+	"github.com/mitchellh/go-homedir"
+	"go.uber.org/zap"
 	"golang.org/x/exp/slog"
 	"log"
 	"net/url"
@@ -38,21 +40,13 @@ func GetConfigDir() string {
 }
 
 func GetDownloadsDir() string {
-	userInfo, err := user.Current()
+	homeDir, err := homedir.Dir()
 	if err != nil {
-		panic("Bcloud配置文件夹路径获取失败" + err.Error())
+		zap.L().Error("无法获取主目录", zap.Error(err))
 	}
-	var homeDir = userInfo.HomeDir
-	// 判断 homeDir/Bcloud 文件夹是否存在
-	var gtDir string
-	if os.PathSeparator == '\\' {
-		// Windows 系统
-		gtDir = homeDir + "\\Downloads"
-	} else {
-		// 非 Windows 系统（如 macOS、Linux 等）
-		gtDir = homeDir + "/Downloads"
-	}
-	return gtDir
+	// 构建下载目录的完整路径
+	downloadDir := filepath.Join(homeDir, "Downloads")
+	return downloadDir
 }
 
 // CreateDir 创建远程文件夹

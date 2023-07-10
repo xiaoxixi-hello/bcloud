@@ -40,6 +40,8 @@ func download(dlink, filename, base, id, token string, db *gorm.DB) error {
 	path, name, err := floder.DownDirPath(filename, base)
 	if err != nil {
 		zap.L().Error("递归创建文件夹失败", zap.Error(err))
+		zap.L().Info("递归创建文件夹失败", zap.String("filename", filename), zap.String("base", base))
+		panic(err)
 		return err
 	}
 
