@@ -44,8 +44,14 @@ func GetDownloadsDir() string {
 	}
 	var homeDir = userInfo.HomeDir
 	// 判断 homeDir/Bcloud 文件夹是否存在
-	var gtDir = homeDir + "/Downloads"
-
+	var gtDir string
+	if os.PathSeparator == '\\' {
+		// Windows 系统
+		gtDir = homeDir + "\\Downloads"
+	} else {
+		// 非 Windows 系统（如 macOS、Linux 等）
+		gtDir = homeDir + "/Downloads"
+	}
 	return gtDir
 }
 
