@@ -81,7 +81,7 @@ func (a *App) initConfigData(name, token string) string {
 		zap.L().Info(fmt.Sprintf("初始化网盘下载路径成功,DownPath %s", floder.GetDownloadsDir()))
 		return floder.GetDownloadsDir()
 	case "MaxDownProcess":
-		_, err := a.DB.Exec("INSERT INTO tb_config_item (name, value) VALUES (?,?)", "MaxDownProcess", 2)
+		_, err := a.DB.Exec("INSERT INTO tb_config_item (name, value) VALUES (?,?)", "MaxDownProcess", 3)
 		if err != nil {
 			panic("初始化网盘并发下载线程数失败")
 		}
@@ -109,7 +109,7 @@ func (a *App) ChangeDownPath() string {
 	_ = a.DB.QueryRow("SELECT * from tb_config_item where name = ?", "DownPath").Scan(&c.Id, &c.Name, &c.Value)
 	if dir != "" {
 		_, _ = a.DB.Exec("UPDATE tb_config_item SET value = ? WHERE name = ?", dir, "DownPath")
-		a.GetConfig()
+		a.Config = a.GetConfig()
 		return dir
 	}
 	return dir

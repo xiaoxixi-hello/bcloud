@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"net/url"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -114,7 +115,8 @@ func FileMetasAll(token string, fileFsid []uint64) []*download.DownDetail {
 				} else if info.Size/1024/1024/1024 < 1 {
 					f.Size = fmt.Sprintf("%dMB", info.Size/1024/1024)
 				} else {
-					f.Size = fmt.Sprintf("%dGB", info.Size/1024/1024/1024)
+
+					f.Size = fmt.Sprintf("%vGB", strconv.FormatFloat(float64(info.Size/1024/1024/1024), 'f', 2, 64))
 				}
 				rf = append(rf, f)
 			}
