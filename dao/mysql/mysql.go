@@ -1,10 +1,11 @@
 package mysql
 
 import (
+	"database/sql"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
@@ -33,30 +34,31 @@ func InitDB() *gorm.DB {
 	return db
 }
 
-func InitLocalDB(path string) *gorm.DB {
-	//host := "127.0.0.1"
-	//port := 63306
-	//username := "root"
-	//password := "123456"
-	//dbname := "db_bcloud"
-
-	//	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, port, dbname)
-	//	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{
-	//	NamingStrategy: schema.NamingStrategy{
-	//		TablePrefix:   "tb_", //表名前缀
-	//		SingularTable: true,  // 单数表名
-	//	},
-	//})
-	db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   "tb_", //表名前缀
-			SingularTable: true,  // 单数表名
-		},
-	})
+func InitLocalDB(path string) *sql.DB {
+	db, err := sql.Open("sqlite3", path)
 	if err != nil {
 		panic("初始化本地数据库失败")
 	}
-
+	createTbConfigItem := `
+		CREATE TABLE IF NOT EXISTS tb_config_item (
+		   id INTEGER PRIMARY KEY AUTOINCREMENT,
+		   name VARCHAR(100) NOT NULL,
+		   value VARCHAR(400) NOT NULL
+		);`
+	createTbDownDetail := `
+	CREATE TABLE IF NOT EXISTS  tb_down_detail (
+	  id INTEGER PRIMARY KEY AUTOINCREMENT,
+	  created_at longtext,
+	  name longtext,
+	  path longtext,
+	  size longtext,
+	  status longtext,
+	  dlink longtext,
+	  fsid bigint unsigned DEFAULT NULL,
+	  process_status bigint DEFAULT NULL
+	);`
+	_, err = db.Exec(createTbConfigItem)
+	_, err = db.Exec(createTbDownDetail)
 	// 自动迁移数据库表结构
 	zap.L().Info("本地数据库创建成功")
 	return db

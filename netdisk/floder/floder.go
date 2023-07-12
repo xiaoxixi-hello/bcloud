@@ -89,24 +89,14 @@ func CreateDir(p string, token string) {
 
 func DownDirPath(f string, base string) (string, string, error) {
 	var localPath string
-	localPath = base + f
-	//fmt.Println(filepath.IsAbs(f))
-	//fmt.Println(f)
-	//if !filepath.IsAbs(f) {
-	//	dir, err := os.Getwd()
-	//	if err != nil {
-	//		slog.Error("err", err)
-	//		return "", "", err
-	//	}
-	//	localPath = filepath.Join(dir, "/", localPath)
-	//}
+	localPath = filepath.Join(base, "/", f)
 	// 创建文件夹
 	var path, fileName string
 	s, _ := os.Stat(path)
 	if s != nil && s.IsDir() {
 		path = localPath
 	} else {
-		pathList := strings.Split(localPath, "/")
+		pathList := strings.Split(f, "/")
 		fileName = pathList[len(pathList)-1]
 		path = localPath[:len(localPath)-len(fileName)]
 	}

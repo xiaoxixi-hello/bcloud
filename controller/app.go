@@ -3,9 +3,9 @@ package controller
 import (
 	"bcloud/common/logger"
 	"bcloud/dao/mysql"
-	"bcloud/netdisk/download"
 	"bcloud/netdisk/floder"
 	"context"
+	"database/sql"
 	"fmt"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -13,7 +13,8 @@ import (
 
 type App struct {
 	ctx    context.Context
-	DB, CB *gorm.DB          // 数据库信息
+	CB     *gorm.DB // 数据库信息
+	DB     *sql.DB
 	Config map[string]string // 系统配置
 }
 
@@ -31,7 +32,6 @@ func (a *App) Startup(ctx context.Context) {
 	*/
 	logger.InitLogger("debug", "dev")
 	a.DB = mysql.InitLocalDB(fmt.Sprintf("%s/bcloud.db", floder.GetConfigDir()))
-	_ = a.DB.AutoMigrate(&ConfigItem{}, &download.DownDetail{})
 	a.CB = mysql.InitDB()
 
 	a.getToken()
@@ -43,6 +43,7 @@ func (a *App) Startup(ctx context.Context) {
 
 // OnBeforeClose action
 func (a *App) OnBeforeClose(ctx context.Context) bool {
+	_ = a.DB.Close()
 	return true
 }
 

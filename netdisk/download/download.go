@@ -3,10 +3,10 @@ package download
 import (
 	"bcloud/netdisk/floder"
 	"crypto/tls"
+	"database/sql"
 	"errors"
 	"fmt"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"os"
@@ -36,12 +36,10 @@ type FileDownloader struct {
 	retryTimes int
 }
 
-func download(dlink, filename, base, id, token string, db *gorm.DB) error {
+func download(dlink, filename, base, id, token string, db *sql.DB) error {
 	path, name, err := floder.DownDirPath(filename, base)
 	if err != nil {
-		zap.L().Error("递归创建文件夹失败", zap.Error(err))
 		zap.L().Info("递归创建文件夹失败", zap.String("filename", filename), zap.String("base", base))
-		panic(err)
 		return err
 	}
 
@@ -103,9 +101,6 @@ func download(dlink, filename, base, id, token string, db *gorm.DB) error {
 		zap.L().Error("创建本地临时文件夹失败", zap.Error(err))
 		return err
 	}
-	defer os.Remove(f.dir + tmpFile.Name())
-	defer tmpFile.Close()
-
 	var downloadedSize int64
 	var buf = make([]byte, 1024)
 	for {
@@ -162,7 +157,7 @@ func download(dlink, filename, base, id, token string, db *gorm.DB) error {
 			break
 		}
 	}
-
+	_ = tmpFile.Close()
 	// 将下载好的临时文件改名为目标文件名
 	err = os.Rename(tmpFile.Name(), f.dir+f.fileName)
 	if err != nil {
@@ -186,22 +181,19 @@ func download(dlink, filename, base, id, token string, db *gorm.DB) error {
 	return nil
 }
 
-func upDataProcess(link, status string, db *gorm.DB) int {
-	var f DownDetail
-	err := db.Find(&f, "dlink = ?", link).Error
-	if err != nil {
-		panic("更新下载进度失败")
-	}
-	if err == gorm.ErrRecordNotFound {
+func upDataProcess(link, status string, db *sql.DB) int {
+	var id int64
+	err := db.QueryRow("SELECT id from  tb_down_detail where dlink = ?", link).Scan(&id)
+	if err == sql.ErrNoRows {
+		zap.L().Info("未找到匹配的记录")
 		return 1
 	}
-	if f.ProcessStatus == 1 {
-		db.Delete(&f, "dlink = ?", link)
+	var p int
+	_ = db.QueryRow("SELECT process_status from  tb_down_detail where id = ?", id).Scan(&p)
+	if p == 1 {
+		_, _ = db.Exec("DELETE FROM tb_down_detail WHERE id = ?", id)
 		return 1
 	}
-	f.Status = status
-	if db.Select("status").Save(&f).Error != nil {
-		panic("更新下载进度失败")
-	}
+	_, _ = db.Exec("UPDATE tb_down_detail SET status = ? WHERE id = ?", status, id)
 	return 0
 }

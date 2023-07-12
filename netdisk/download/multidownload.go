@@ -1,9 +1,9 @@
 package download
 
 import (
+	"database/sql"
 	"fmt"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 	"strconv"
 	"sync"
 )
@@ -15,7 +15,7 @@ type MultiThread struct {
 	id          string
 	mutex       sync.Mutex
 	jobs        chan *DownDetail
-	db          *gorm.DB
+	db          *sql.DB
 }
 
 func (m *MultiThread) ProducerDown(f []*DownDetail) {
@@ -48,7 +48,7 @@ func (m *MultiThread) ConsumerDown(ch <-chan *DownDetail, i int) {
 	}
 }
 
-func MultiThreadDownRun(f []*DownDetail, base, id, token string, db *gorm.DB, processCount string) error {
+func MultiThreadDownRun(f []*DownDetail, base, id, token string, db *sql.DB, processCount string) error {
 	m := MultiThread{
 		accessToken: token,
 		base:        base,
